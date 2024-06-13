@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>weather app</title>
+  <link rel="stylesheet" href="index.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="search">
+        <input type="text" placeholder="enter city name" spellcheck="false">
+        <button><i class='bx bx-search'></i></button>
+      </div>
+      <div class="weather">
+        <img src="weather.jpg" class="weather-icon">
+        <h1 class="tempe">22°C</h1>
+        <h2 class="city">New york</h2>
+        <div class="details">
+          <div class="colo">
+            <i class='bx bxs-sun'></i>
+          </div>
+          <p class="humidity">50 %</p>
+          <p>Humidity</p>
+        </div>
+        <div class="colt">
+          <i class='bx bx-wind'></i>
+        </div>
+        <p class="wind">20 Km/h</p>
+        <p>Wind Speed</p>
+      </div>
+    </div>
+  </header>
+  <script>
+    const apiKey = "a5d4e31351628e489c2ace539cd274a0";
+    const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+    
+    const searchBox = document.querySelector(".search input");
+    const searchBtn = document.querySelector(".search button");
+
+    async function checkWeather(city) {
+      try {
+        const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log(data);
+        document.querySelector(".city").innerHTML = data.name;
+        document.querySelector(".tempe").innerHTML = data.main.temp + "°C";
+        document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML = data.wind.speed + "Km/h";
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+      }
+    }
+
+    searchBtn.addEventListener("click", () => {
+      checkWeather(searchBox.value);
+    });
+
+    // You might want to load the weather for a default city on page load
+    window.addEventListener('load', () => {
+      checkWeather("Berlin"); // Default city - you can change it as needed
+    });
+  </script>
+</body>
+</html>
